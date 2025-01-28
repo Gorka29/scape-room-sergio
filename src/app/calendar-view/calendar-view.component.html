@@ -1,0 +1,36 @@
+<div class="container mx-auto flex flex-col items-center bg-gray-800/50 p-6 rounded-lg">
+  <div class="calendar pt-10 pb-24 text-white rounded-lg calendar-width">
+    <div class="calendar-header flex justify-between items-center mb-4">
+      <button class="btn-nav btn-previous py-2 px-4 rounded" (click)="previousMonth()"></button>
+      <h2 class="text-2xl font-bold text-center text-white">{{ getNombreMes(currentMonth) }} {{ currentMonth.getFullYear() }}</h2>
+      <button class="btn-nav btn-next py-2 px-4 rounded" (click)="nextMonth()"></button>
+    </div>
+    <div class="calendar grid grid-cols-7 gap-2">
+      <div class="text-center py-2 font-bold">Lun</div>
+      <div class="text-center py-2 font-bold">Mar</div>
+      <div class="text-center py-2 font-bold">Mié</div>
+      <div class="text-center py-2 font-bold">Jue</div>
+      <div class="text-center py-2 font-bold">Vie</div>
+      <div class="text-center py-2 font-bold">Sáb</div>
+      <div class="text-center py-2 font-bold">Dom</div>
+      <div *ngFor="let week of weeks" class="calendar-row grid grid-cols-7 gap-2">
+        <div *ngFor="let day of week" class="flex justify-center items-center">
+          <div
+            class="calendar-cell-day flex items-center justify-center w-10 h-10 rounded-full relative"
+            [attr.data-date]="day.date.toISOString()"
+            [ngClass]="{
+              'bg-gray-700 text-gray-400': isDateInPast(day.date),
+              'event-cell': day.events.length,
+              'bg-white text-black': day.isToday,
+              'non-current-month': !day.isCurrentMonth,
+              'bg-gray-800/50': !day.isToday && !day.events.length,
+            }"
+            (click)="null"
+          >
+            {{ day.date.getDate() }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,258 @@
+.calendar {
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+  border-collapse: collapse;
+  gap: 0.5rem; /* Añadido */
+}
+
+.calendar th,
+.calendar td {
+  width: 14.28%; /* 100% dividido por 7 días */
+  height: auto; /* Altura automática para que se ajuste */
+  text-align: center; /* Centrar el texto */
+  vertical-align: top; /* Alinear el contenido en la parte superior */
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.calendar-row {
+  display: contents;
+}
+
+.has-event {
+  background-color: #e6e6e6;
+  color: gray;
+}
+
+.calendar-cell,
+.calendar-cell-day {
+  text-align: center;
+  position: relative;
+  // border-radius: 50%; /* Cambiado a 50% para hacer las celdas circulares */
+  // width: 2.5rem; /* Ancho por defecto */
+  // height: 2.5rem; /* Altura por defecto */
+  // line-height: 2.5rem; /* Línea por defecto para centrar el texto */
+  // margin: 0.25rem; /* Margen por defecto */
+  // aspect-ratio: 1 / 1; /* Mantener proporción 1:1 para círculos perfectos */
+  // background-color: #3D3D43; /* Color de fondo para celdas normales */
+  // color: gray; /* Color de texto para celdas normales */
+
+  &.event-cell {
+    position: relative;
+    isolation: isolate;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: -3px;
+      left: -3px;
+      right: -3px;
+      bottom: -3px;
+      border-radius: 50%;
+      background: conic-gradient(
+        from 0deg,
+        transparent 0%,
+        transparent 20%,
+        rgba(0, 0, 0, 0) 35%,
+        rgba(0, 0, 0, 0) 65%,
+        transparent 80%,
+        transparent 100%
+      );
+      animation: rotate 3s linear infinite;
+      z-index: -1;
+      filter: blur(2px);
+      opacity: 0.8;
+    }
+
+  }
+
+  &:hover {
+    &::before, &::after {
+      // animation-duration: 1.5s;
+      filter: blur(1px);
+      // opacity: 1;
+    }
+  }
+}
+
+.event-cell {
+  background-color: #faca15; /* Color de fondo para celdas con eventos */
+  color: black; /* Color de texto para celdas con eventos */
+  box-shadow: 0 0 15px -2px rgba(250, 202, 21, 0.3);
+
+  &:hover {
+    transition: transform 0.2s ease;
+    transform: scale(1.05);
+  }
+}
+
+@media (min-width: 768px) {
+  .calendar-cell,
+  .calendar-cell-day {
+    //width: 3rem; /* Ajustar ancho para pantallas más grandes */
+    //height: 3rem; /* Ajustar altura para pantallas más grandes */
+    //line-height: 3rem; /* Ajustar línea para centrar el texto */
+  }
+}
+
+@media (min-width: 1024px) {
+  .calendar-cell,
+  .calendar-cell-day {
+    // width: 4rem; /* Ajustar ancho para pantallas aún más grandes */
+    // height: 4rem; /* Ajustar altura para pantallas aún más grandes */
+    // line-height: 4rem; /* Ajustar línea para centrar el texto */
+  }
+}
+
+.calendar-cell::before {
+  content: attr(data-full);
+}
+
+/* Días de la semana con solo la primera letra en pantallas pequeñas */
+@media (max-width: 768px) {
+  .calendar-cell::before {
+    content: attr(data-short);
+  }
+}
+
+/* Botones de navegación */
+.btn-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  width: 40px; /* Ancho del botón */
+  height: 40px; /* Altura del botón */
+  border-radius: 50%; /* Hace los botones circulares */
+  text-indent: -9999px; /* Oculta el texto */
+
+  &:hover {
+    background-color: #000000;
+    color: white !important;
+  }
+}
+
+.btn-nav::before {
+  content: '';
+  display: block;
+  width: 8px;
+  height: 8px;
+  border: solid #ffffff;
+  border-width: 0 2px 2px 0;
+}
+
+.btn-nav:hover::before {
+  border-color: white;
+}
+
+/* Estilos específicos para pantallas mayores a 568px */
+@media (min-width: 569px) {
+  .btn-previous {
+    margin-left: 30px;
+  }
+
+  .btn-next {
+    margin-right: 30px;
+  }
+}
+
+.btn-previous::before {
+  transform: rotate(135deg);
+}
+
+.btn-next::before {
+  transform: rotate(-45deg);
+}
+
+@media (min-width: 501px) {
+  .btn-nav {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; /* Mantiene la forma circular */
+    padding: 0; /* Elimina el padding adicional */
+  }
+
+  .btn-previous::before,
+  .btn-next::before {
+    display: inline-block; /* Asegura que las flechas siempre se muestren */
+  }
+}
+
+/* Estilos para días fuera del mes actual */
+.non-current-month {
+  // background-color: rgba(61, 61, 67, 0.3) !important;
+  color: rgb(75 85 99 / var(--tw-text-opacity, 1)) !important;
+  cursor: default !important;
+}
+
+.calendar-cell-day {
+  // position: relative;
+  // isolation: isolate;
+  // border-radius: 50% !important;
+  // aspect-ratio: 1 / 1;
+  // background-color: #ebebeb; /* Color base para todos los días */
+
+  // Días con eventos fuera del mes actual - SIN ANIMACIÓN
+  &.non-current-month.event-cell {
+    // background-color: #000000 !important;
+    // // color: rgba(255, 255, 255, 0.3) !important;
+    // cursor: pointer !important;
+    // color: white !important; /* Color de texto para celdas con eventos */
+    // box-shadow: 0 0 15px -2px rgba(205, 191, 176, 0.3);
+  }
+
+  // Días sin eventos fuera del mes actual
+  &.non-current-month:not(.event-cell) {
+    background-color: rgba(255, 255, 255, 0) !important;
+    color: rgba(255, 255, 255, 0.3) !important;
+    cursor: default !important;
+    color: rgb(75 85 99 / var(--tw-text-opacity, 1)) !important;
+  }
+
+  // Animación SOLO para eventos del mes actual
+  &:not(.non-current-month).event-cell {
+    background-color: #000000;
+    color: white;
+    box-shadow: 0 0 15px -2px rgba(250, 202, 21, 0.3);
+    cursor: pointer;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: -3px;
+      left: -3px;
+      right: -3px;
+      bottom: -3px;
+      border-radius: 50%;
+      background: conic-gradient(
+        from 0deg,
+        transparent 0%,
+        transparent 20%,
+        rgba(0, 0, 0, 0) 35%,
+        rgba(0, 0, 0, 0) 65%,
+        transparent 80%,
+        transparent 100%
+      );
+      animation: rotate 3s linear infinite;
+      z-index: -1;
+      filter: blur(2px);
+      opacity: 0.8;
+    }
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
